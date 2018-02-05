@@ -5,11 +5,11 @@
 
 <head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
+   <?php 
+   include('general_meta.php');
+   ?>
 
-    <title>Material Design Bootstrap</title>
+    <title>Index</title>
 
     <link href="img/favicon.ico" rel="icon">
     <link rel="shortcut icon" href="img/favicon.ico"/>
@@ -22,14 +22,14 @@
     <!-- Material Design Bootstrap -->
     <link href="css/mdb.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
 
 </head>
 
 <body>
 
     <!--Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark  fixed-top scrolling-navbar">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <strong><img src="img/logo-nav.png" alt="" title="" /></img></strong>
@@ -222,7 +222,7 @@
 
     <!--/.Main layout-->
     <?php
-    include ('general_footer.php');
+    include ('index_footer.php');
     include ('general_script.php');
     ?>
  
