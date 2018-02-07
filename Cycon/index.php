@@ -1,3 +1,28 @@
+ <?php
+require_once('login_action.php'); // Includes Login Script
+if(isset($_SESSION['login_user']))
+{           
+            $user=$_SESSION['login_user'];// passing the session user to new user variable
+            $connection = mysqli_connect("localhost", "root", "","zundae"); // Establishing Connection with Server by passing server_name, user_id and password as a parameter
+            $query = mysqli_query($connection,"SELECT * FROM account WHERE username='$user'"); 
+            //SQL query to fetch information of registerd users and finds user match.
+            
+
+
+            $rows = mysqli_fetch_assoc($query);
+            
+            
+                if ($rows['accLevel'] == '1' || $rows['accLevel'] == '2' || $rows['accLevel'] == '3') //checking if acclevel is equal to 0
+                {   
+                    header("location: dashboard.php");// retain to user dashboard
+                }
+                else
+                {
+                header("location: index.php"); 
+                }            
+}
+
+  ?>
 
 
 <!DOCTYPE html>
@@ -23,6 +48,7 @@
     <link href="css/mdb.min.css" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 
 </head>
 
@@ -65,7 +91,7 @@
                 </ul>
             </div>
             <div class="float-right">
-                <button type="button" class="btn btn-dark-green">Login</button>
+                <button type="button" class="btn btn-dark-green" data-toggle="modal" data-target="#modalLoginForm">Login</button>
             </div>
                     
         </div>
@@ -234,3 +260,40 @@
 </body>
 
 </html>
+
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-bold">Login</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <!-- login -->
+                <form method="POST"  action="login_action.php">
+                    <div class="md-form">
+                        <i class="fa fa-user prefix grey-text"></i>
+                        <input placeholder="Username" type="text" id="form5" class="form-control" name="username">
+                    </div>
+                    <div class="md-form">
+                        <i class="fa fa-eye prefix grey-text"></i>
+                        <input placeholder="Password" type="text" id="form5" class="form-control" name="password">
+                    </div>
+                    <div class="md-form">
+                        <center>
+                            <div class="btn-group">
+                                <input type="submit" id="form5" class="btn btn-elegant" name="submit">
+                                <input type="button"  id="form5" class=" btn btn-elegant" value="close"  data-dismiss="modal">
+                            </div>
+                        
+                        </center>
+                    </div>
+                </form>
+                <!-- login -->
+            
+            </div>
+        </div>
+    </div>
+</div>
