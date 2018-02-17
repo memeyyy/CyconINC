@@ -5,16 +5,16 @@
         <div class="container">
             <div class="row">
                 <!--First column-->
-                <div class="col-lg-3 col-md-6">
+             <!--   <div class="col-lg-3 col-md-6">
                     <h5 class="title mb-3">
-                        <strong>Cycon Inc</strong>
+                        <strong>Cycon Incorporated</strong>
                     </h5>
-                    <p>Substation company description here</p>
+                    <p>Private Electrical Company</p>
                 </div>
                 <!--/.First column-->
-                <hr class="w-100 clearfix d-sm-none">
+             <!--   <hr class="w-100 clearfix d-sm-none">
                 <!--Second column-->
-                <div class="col-lg-2 col-md-6 ml-auto">
+            <!--     <div class="col-lg-2 col-md-6 ml-auto">
                     <h5 class="title mb-3">
                         <strong>link</strong>
                     </h5>
@@ -43,7 +43,7 @@
         <!--Copyright-->
         <div class="footer-copyright">
             <div class="container-fluid">
-                © 2018 Copyright:
+                © 2018 Copyright
                 <a href="https://www.cycon.com"> CYCON INC. </a>
 
             </div>

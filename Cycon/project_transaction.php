@@ -1,6 +1,7 @@
 
 <?php 
     require_once('session.php');
+    $page = "project_transaction";
 
 ?>
 <!DOCTYPE html>
@@ -12,10 +13,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>Material Design Bootstrap</title>
+    <title>Payment Transaction</title>
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -49,7 +50,7 @@
     <!--Card image-->
     <div class="view gradient-card-header purple-gradient narrower py-4 mx-4 mb-3 d-flex justify-content-center align-items-center">
 
-        <h4 class="white-text font-bold font-up mb-0">Project Transaction</h4>
+        <h4 class="white-text font-bold font-up mb-0">Payment Transaction</h4>
 
     </div>
     <!--/Card image-->

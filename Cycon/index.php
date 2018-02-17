@@ -66,12 +66,12 @@ if(isset($_SESSION['login_user']))
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto ">
-                    <li class="nav-item active ml-2">
-                        <a class="nav-link" href="#">Home
+                    <!-- <li class="nav-item active ml-2">
+                        <a class="nav-link" href="index.php">Home
                             <span class="sr-only">(current)</span>
                         </a>
-                    </li>
-                    <li class="nav-item ml-2">
+                    </li> -->
+                  <!--  <li class="nav-item ml-2">
                         <a class="nav-link" href="#">Mission</a>
                     </li>
                     <li class="nav-item ml-2">
@@ -123,9 +123,7 @@ if(isset($_SESSION['login_user']))
                             <li>
                                 <h3 class="flex-item">General Contractor</h3>
                             </li>
-                            <li>
-                                <a target="_blank" href="#" class="btn btn-outline-white btn-lg flex-item"
-                                    rel="nofollow">Learn more</a>
+                          
                             </li>
                     </ul>
                 </div>
@@ -146,10 +144,7 @@ if(isset($_SESSION['login_user']))
                         <li>
                             <h3 class="my-4">Designer</h3>
                         </li>
-                        <li>
-                            <a target="_blank" href="#" class="btn btn-outline-white btn-lg flex-item"
-                                    rel="nofollow">Learn more</a>
-                        </li>
+                   
                     </ul>
                 </div>
                 <!-- /.Caption -->
@@ -169,10 +164,7 @@ if(isset($_SESSION['login_user']))
                         <li>
                             <h3 class="my-4">Fabricator</h3>
                         </li>
-                        <li>
-                            <a target="_blank" href="#" class="btn btn-outline-white btn-lg flex-item"
-                                    rel="nofollow">Learn more</a>
-                        </li>
+                     
                     </ul>
                 </div>
                 <!-- /.Caption -->
@@ -191,10 +183,7 @@ if(isset($_SESSION['login_user']))
                         <li>
                             <h3 class="my-4">Consultant</h3>
                         </li>
-                        <li>
-                            <a target="_blank" href="#" class="btn btn-outline-white btn-lg flex-item"
-                                    rel="nofollow">Learn more</a>
-                        </li>
+                     
                     </ul>
                 </div>
                 <!-- /.Caption -->
@@ -279,7 +268,7 @@ if(isset($_SESSION['login_user']))
                     </div>
                     <div class="md-form">
                         <i class="fa fa-eye prefix grey-text"></i>
-                        <input placeholder="Password" type="text" id="form5" class="form-control" name="password">
+                        <input placeholder="Password" type="Password" id="form5" class="form-control" name="password">
                     </div>
                     <div class="md-form">
                         <center>

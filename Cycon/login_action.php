@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
 		else
 		{
 			// Establishing Connection with Server by passing server_name, user_id and password as a parameter
-			$connection = mysqli_connect("localhost", "root", "","zundae");
+			require_once('dbconfig.php');
 			// Define $username and $password
 			$username=$_POST['username'];
 			$password=$_POST['password'];
@@ -27,11 +27,11 @@ if (isset($_POST['submit'])) {
 			
 			// Selecting Database
 			// SQL query to fetch information of registerd users and finds user match.
-			$query = mysqli_query( $connection,"SELECT * FROM account WHERE password = '$password' AND username='$username'");
+			$query = mysqli_query( $connection,"SELECT * FROM user_account WHERE password = '$password' AND username='$username'");
 			$rows = mysqli_fetch_assoc($query);
 
 
-				if ($rows['accLevel'] == '1' || $rows['accLevel'] == '2' || $rows['accLevel'] == '3') //checking if acclevel is equal to 0
+				if (!empty($rows['level_ID'])) //checking if acclevel is equal to 0
                 {   
                     
 					$_SESSION['login_user']=$username; // Initializing Session
