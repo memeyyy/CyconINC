@@ -35,6 +35,8 @@ if (isset($_POST['submit'])) {
                 {   
                     
 					$_SESSION['login_user']=$username; // Initializing Session
+					$_SESSION['level_ID'] = $rows['level_ID'];
+					mysqli_query($connection,"INSERT INTO `user_log` (`log_ID`, `log_Type`, `log_Date`, `user_ID`) VALUES (NULL, NULL, CURRENT_TIMESTAMP, ".$rows['user_ID'].");");
 					header("location: dashboard.php"); // retain to user dashboard
                 }
 				else 

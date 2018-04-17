@@ -1,18 +1,18 @@
-    <!--Footer-->
-    <footer class="page-footer center-on-small-only mt-0">
+<!--Footer-->
+<footer class="page-footer center-on-small-only mt-0">
 
-        <!--Footer links-->
-        <div class="container">
-            <div class="row">
-                <!--First column-->
-             <!--   <div class="col-lg-3 col-md-6">
+    <!--Footer links-->
+    <div class="container">
+        <div class="row">
+            <!--First column-->
+            <!--   <div class="col-lg-3 col-md-6">
                     <h5 class="title mb-3">
                         <strong>Cycon Incorporated</strong>
                     </h5>
                     <p>Private Electrical Company</p>
-                </div>
+                </div>-->
                 <!--/.First column-->
-             <!--   <hr class="w-100 clearfix d-sm-none">
+            <!--   <hr class="w-100 clearfix d-sm-none">-->
                 <!--Second column-->
             <!--     <div class="col-lg-2 col-md-6 ml-auto">
                     <h5 class="title mb-3">
@@ -33,22 +33,22 @@
                     </li>
 
                     </ul>
-                </div>
+                </div>-->
                 <!--/.Second column-->
-               
-            </div>
+
         </div>
-        <!--/.Footer links-->
+    </div>
+    <!--/.Footer links-->
 
-        <!--Copyright-->
-        <div class="footer-copyright">
-            <div class="container-fluid">
-                © 2018 Copyright
-                <a href="https://www.cycon.com"> CYCON INC. </a>
+    <!--Copyright-->
+    <div class="footer-copyright">
+        <div class="container-fluid">
+            © 2018 Copyright
+            <a href="https://www.cycon.com"> CYCON INC. </a>
 
-            </div>
         </div>
-        <!--/.Copyright-->
+    </div>
+    <!--/.Copyright-->
 
-    </footer>
-    <!--/.Footer-->
+</footer>
+<!--/.Footer-->

@@ -13,42 +13,56 @@ echo "Total cost: ".$proj_costing."<br>";
 echo "Downpayment cost: ".$Downpayment."<br>";
 echo "Progressbilling cost: ".$Progressbilling."<br>";
 echo "Retention cost: ".$Retention."<br>";
+$pt_down = mysqli_query($connection,"SELECT SUM(pt_amount) AS pt_amount FROM `purchase_transaction` WHERE po_ID = '".$p_id."' AND term_ID = 1 AND status_ID = 2");
+$pt_down_stat = mysqli_fetch_array($pt_down);
 
 
-$sql1 = mysqli_query($connection,"SELECT pt.pt_amount as pt_amount,term.term_ID as term_ID,pt.pt_status as pt_status FROM project_monitoring pm
-INNER JOIN purchase_order po ON pm.proj_ID = po.proj_ID
-INNER JOIN purchase_transaction pt ON po.po_ID = pt.po_ID
-INNER JOIN payment_term term ON pt.pt_term = term.term_ID WHERE pm.proj_ID = '".$p_id."'");
-$ProgressPaid = 0;
-while ($check = mysqli_fetch_array($sql1)){
+$user_amount = 500;
+echo "<br>";
+//check if downpayment percentage is = to payment receive
+if ($Downpayment == $pt_down_stat['pt_amount'] ) {
+	// if downpayment was done 
+	//process to process billing
+	$Downpayment_percent =  100;
+	$pt_pbill = mysqli_query($connection,"SELECT SUM(pt_amount) AS pt_amount FROM `purchase_transaction` WHERE po_ID = '".$p_id."' AND term_ID = 2 AND status_ID = 2");
+	$pt_pbill_stat = mysqli_fetch_array($pt_pbill);
+	echo "<br>";
+	if ($Progressbilling == $pt_pbill_stat['pt_amount'] ) {
+		//if progress billing was done display 
+		//process to retention payment
+		$Progressbilling_percent =  100;
 
-	echo  "<br>"; 
-	$term_ID = $check['term_ID'];
-	$pt_amount = $check['pt_amount'];
-	$pt_status  = $check['pt_status'];
-	echo  "<br>"; 
-	if ($Downpayment == $pt_amount AND $term_ID == 1 AND $pt_status == 'receive') {
-			//PWEDE NG MAG ADD NG PROGRESS BILLING 
+		$pt_retention = mysqli_query($connection,"SELECT SUM(pt_amount) AS pt_amount FROM `purchase_transaction` WHERE po_ID = '".$p_id."' AND term_ID = 3 AND status_ID = 2");
 
-			echo "confirm 30% done";
+		$pt_retention_stat = mysqli_fetch_array($pt_retention);
+		if ($Retention == $pt_retention_stat['pt_amount']){
+			$Retention_percent =  100;
+			echo "update po to done";
+			//UPDATE `purchase_order` SET `status_ID` = '4' WHERE `purchase_order`.`po_ID` = 8;
+		}
+		else{
+			$Retention_percent ="Pending";
+		}
+	}
+	else{
+		echo "Balance:<br>";
+		echo $balance = $Progressbilling - $pt_pbill_stat['pt_amount'];
 
+		$Progressbilling_percent = ($pt_pbill_stat['pt_amount']/$Progressbilling)*100;
+		echo  doubleval($Progressbilling_percent);
+		$chkbal = $balance - $user_amount;
+		if ($chkbal>=0) {
+			// insert transaction
 
 		}
-	if ($term_ID == 2 AND $pt_status == 'receive') {
-		
-
-		 $ProgressPaid += $pt_amount;
-		
-	}
-	if ($term_ID == 3 AND $ProgressPaid == $Progressbilling AND $pt_status == 'receive' ) {
-		
-
-		 echo "RETENTION";
+		else{
+			//amount exceed
+		}
 		
 	}
 }
-echo  "<br>"; 
-echo "Progress Bill 60%";
-echo  "<br>"; 
-echo  $progressbillPercent = ($ProgressPaid/$Downpayment)*100 . "%";
+
+
+
+
 ?>

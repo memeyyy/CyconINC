@@ -1,7 +1,11 @@
-
 <?php 
     require_once('session.php');
     $page = "dashboard";
+
+    
+
+       
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,58 +30,62 @@
     <!-- Template styles -->
 
     <link rel="stylesheet" type="text/css" href="css/admin.css">
-    <link rel="stylesheet" type="text/css" href="css/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/dataTables.bootstrap4.min.css" />
     <link rel="stylesheet" type="text/css" href="css/Table_style.css">
 
 </head>
+
 <body>
 
     <header>
+
         <?php 
 
         require_once('admin_nav.php');
+
         ?>
     </header>
 
     <main>
         <!--Main layout-->
         <div class="container" style=" min-height: 900px;">
-            
-    
-                
-             
+
+
+
+
+
         </div>
-            
+
     </main>
 
-   <!--/.Main layout-->
+    <!--/.Main layout-->
     <?php
     include ('admin_footer.php');
     include ('general_script.php');
     ?>
 
-<script src="js/jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
-         
-</script>
- 
-    <script>
-        new WOW().init();
+        <script src="js/jquery.dataTables.min.js"></script>
+        <script src="js/dataTables.bootstrap4.min.js"></script>
 
-    $(document).ready(function() {
-    $('#example').DataTable();
-    $('.dataTables_wrapper').find('label').each(function() {
-      $(this).parent().append($(this).children());
-    });
-    $('select').addClass('mdb-select');
-    $('.mdb-select').material_select();
-});
+        </script>
 
-// Tooltips Initialization
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-    </script>
+        <script>
+            new WOW().init();
+
+            $(document).ready(function() {
+                $('#example').DataTable();
+                $('.dataTables_wrapper').find('label').each(function() {
+                    $(this).parent().append($(this).children());
+                });
+                $('select').addClass('mdb-select');
+                $('.mdb-select').material_select();
+            });
+
+            // Tooltips Initialization
+            $(function() {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        </script>
 
 </body>
 

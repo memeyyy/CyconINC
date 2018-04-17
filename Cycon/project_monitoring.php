@@ -2,6 +2,7 @@
 <?php 
     require_once('session.php');
     $page = "project_monitoring";
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,8 +43,16 @@
 
     <main>
         <!--Main layout-->
-        <div class="container">
-            
+        <div class="container" style=" min-height: 900px;">
+            <header class="head" style="padding-top: 3em;">
+                <div class="main-bar">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+                  <li class="breadcrumb-item active">Project Monitoring</li>
+                </ol>
+                </div>
+                <!-- /.main-bar -->
+            </header>
             <div class="card card-cascade narrower mt-5">
 
     <!--Card image-->
@@ -55,17 +64,66 @@
     <!--/Card image-->
 
     <div class="px-4">
+<?php 
+if ($level_session == 1) {
+?>
+  <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalprint">Print</a>
+<?php
+}
+else{
+  ?>
+  <a class="btn btn-primary btn-lg active" data-toggle="modal" data-target="#modaladd">Add Project</a>
+  <a class="btn btn-primary btn-lg float-right" data-toggle="modal" data-target="#modalprint">Print</a>
+  <?php
+}
+?>
+<br><br>
+<br>
 
-<a class="btn btn-primary btn-lg active" data-toggle="modal" data-target="#modaladd">Add Project</a>
+<?php 
+if (isset($_GET['oct'])) {
+  $oct = $_GET['oct'];
+      
+      if ($oct == "Ongoing") {
+         $filter = "AND s.status_Name = 'Ongoing' ";
+      }
+      if ($oct == "Complete") {
+         $filter = "AND s.status_Name = 'Complete' ";
+      }
+      
+    }
+    else{
+      $filter = "";
+    }
+?>
+<select id="navigation"  class="browser-default form-control" style="  
+  padding: 0;
+  padding-bottom: 0.6rem;
+  padding-top: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  background-color: transparent;
+  background-image: none;
+  border-radius: 0;
+  margin-top: 1rem;
+  margin-left: 3rem;
+  margin-bottom: 1rem; width: 200px;  margin-left: 15px;">
+    <option value="" class="Disable">Select Type</option>
+    <option value="project_monitoring">All</option>
+    <option value="project_monitoring?oct=Complete">Complete</option>
+    <option value="project_monitoring?oct=Ongoing">Ongoing</option>
+</select>
         <!--Table-->
    <table id="project_monitoring" class="table table-striped table-bordered table-responsive-md" cellspacing="0" width="100%">
     <thead class="mdb-color darken-3 text-white" >
         <tr>
             <th>Project Title</th>
             <th>Project Owner</th>
+            <th>Date Started</th>
+            <th>Date Ended</th>
             <th>Project Location</th>
             <th>Project Progress</th>
-            <th>Action</th>
+            <th class="text-center">Action</th>
         </tr>
     </thead>
     <tfoot class="mdb-color darken-3 text-white" >
@@ -75,16 +133,29 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
+            <th class="text-center"></th>
         </tr>
     </tfoot>
-    <tbody>
+    <tbody id="pm_container">
          <?php 
-        $project_q = mysqli_query($connection,"SELECT * FROM `project_monitoring`");
+        $project_q = mysqli_query($connection,"SELECT pm.*,s.status_Name FROM `project_monitoring` pm INNER JOIN `status` s ON pm.status_ID = s.status_ID WHERE pm.visibility = 1 $filter ORDER BY pm.`date_added` DESC");
         while ($project_fetch = mysqli_fetch_assoc($project_q)) {
+
             ?>
             <tr>
             <td><?php 
             echo $project_fetch['proj_Title'];
+            if ($project_fetch['visibility']) {
+             
+              if( $project_fetch['visibility'] == 2){
+              echo "<font  color='red'> (Terminated)</font>";
+              }
+              if( $project_fetch['visibility'] == 3){
+              
+              echo "<font  color='orange'> (On-hold)</font>";
+              }
+            }
             ?>
             <br>
             <p style="color:grey;">Started on: <?PHP
@@ -93,16 +164,47 @@
             <td><?php echo $project_fetch['proj_Owner']; ?></td>
             <td><?php echo $project_fetch['proj_Location']; ?></td>
             
-            <td><?php echo $project_fetch['proj_Status']; ?></td>
-            <td >
+            <td><?php echo $project_fetch['proj_DateStarted']; ?></td>
+
+            <td><?php echo $project_fetch['proj_DateEnded']; ?></td>
+            <td><?php echo $project_fetch['status_Name']; ?></td>
+            <?php 
+            if ($level_session==1 || $level_session==3 || $level_session==4 || $level_session == 6) {
+            ?>
+            <td class="text-center">
                 <div class="btn-group" data-toggle="buttons">
                   <button type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#modalview" data-id="<?php echo $project_fetch['proj_ID']; ?>" id="viewProject"><i class="fa fa-eye" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="View"></i></button>
-                  <button type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#modaledit" data-id="<?php echo $project_fetch['proj_ID']; ?>" id="editProject"><i class="fa fa-edit" aria-hidden="true"  data-toggle="tooltip" data-placement="top" title="Edit"></i></button>
-                  <button type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#modaldelete" data-id="<?php echo $project_fetch['proj_ID']; ?>" id="deleteProject"><i class="fa fa-close" aria-hidden="true"  data-toggle="tooltip" data-placement="top" title="Delete"></i></button>
+                  <?php 
+                   if ($level_session==3 || $level_session==4 || $level_session == 6) {
+                    ?>
+                     <button type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#modalUpdate" data-id="<?php echo $project_fetch['proj_ID']; ?>" id="updateProject"><i class="fa fa-edit" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Update"></i></button>
+                    <!-- <button type="button" class="btn btn-primary  btn-sm" onclick="window.location='project_Monitoring_Edit?proj_ID=<?php echo $project_fetch['proj_ID']; ?>'" ><i class="fa fa-edit" aria-hidden="true"  data-toggle="tooltip" data-placement="top" title="Edit"></i></button> -->
+                    <?php 
+                    if($level_session==4 || $level_session == 6) {
+                    ?>
+                    <button type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#modaldelete" data-id="<?php echo $project_fetch['proj_ID']; ?>" id="deleteProject"><i class="fa fa-close" aria-hidden="true"  data-toggle="tooltip" data-placement="top" title="Delete"></i></button>
+                    <?php
+                    }
+                    ?>
+                  
+                    <?php
+                   }
+                  ?>
+                  
                 </div>
             </td>
-            </tr>
             <?php
+            }
+            else{
+                ?>
+                <td class="text-center">
+                  <button type="button" class="btn btn-warning  btn-sm" >Disable</button>
+                </td>
+                <?php
+              }
+              ?>
+              </tr>
+              <?php
         }
            
         ?>
@@ -133,15 +235,22 @@
         new WOW().init();
      
                 
+$(document).ready(function() {
+$('#project_monitoring').dataTable({
+    
+    "aaSorting":[] });
+});
     $(document).ready(function() {
-    $('#project_monitoring').DataTable( 
-    // {
-    //     "processing": true,
-    //     "serverSide": true,
-    //     "sAjaxSource": "serverside_data_project_monitoring.php"
+    // $('#project_monitoring').DataTable( 
+    // // {
+    // //     "processing": true,
+    // //     "serverSide": true,
+    // //     "sAjaxSource": "serverside_data_project_monitoring.php"
         
-    // }
-     );
+    // // }
+    //  );
+
+
 
 
 
@@ -171,7 +280,7 @@ $(document).ready(function(){
     $('#modal-loader').show();      // load ajax loader
     
     $.ajax({
-      url: 'Project_View.php',
+      url: 'Project_Monitoring_View.php',
       type: 'POST',
       data: 'id='+uid,
       dataType: 'html'
@@ -188,35 +297,96 @@ $(document).ready(function(){
     });
     
   });
-  $(document).on('click', '#deleteProject', function(e){
+    
+
+       $(document).on('click', '#updateProject', function(e){
     
     e.preventDefault();
     
     var uid = $(this).data('id');   // it will get id of clicked row
     
-    $('#dynamic-content').html(''); // leave it blank before ajax call
-    $('#modal-loader').show();      // load ajax loader
+    $('#update-content').html(''); // leave it blank before ajax call
+    $('#updatemodal-loader').show();      // load ajax loader
     
     $.ajax({
-      url: 'Project_Delete.php',
+      url: 'Project_Monitoring_update.php',
       type: 'POST',
       data: 'id='+uid,
       dataType: 'html'
     })
     .done(function(data){
       console.log(data);  
-      $('#dynamic-content').html('');    
-      $('#dynamic-content').html(data); // load response 
-      $('#modal-loader').hide();      // hide ajax loader 
+      $('#update-content').html('');    
+      $('#update-content').html(data); // load response 
+      $('#updatemodal-loader').hide();      // hide ajax loader 
     })
     .fail(function(){
-      $('#dynamic-content').html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
-      $('#modal-loader').hide();
+      $('#update-content').html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+      $('#updatemodal-loader').hide();
+    });
+    
+  });
+  $(document).on('click', '#deleteProject', function(e){
+    
+    e.preventDefault();
+    
+    var uid = $(this).data('id');   // it will get id of clicked row
+    
+    $('#delete-content').html(''); // leave it blank before ajax call
+    $('#modal-loader1').show();      // load ajax loader
+    
+    $.ajax({
+      url: 'Project_Monitoring_Delete.php',
+      type: 'POST',
+      data: 'id='+uid,
+      dataType: 'html'
+    })
+    .done(function(data){
+      console.log(data);  
+      $('#delete-content').html('');    
+      $('#delete-content').html(data); // load response 
+      $('#modal-loader1').hide();      // hide ajax loader 
+    })
+    .fail(function(){
+      $('#delete-content').html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+      $('#modal-loader1').hide();
+    });
+    
+  });
+
+   $(document).on('click', '#return', function(e){
+    
+    e.preventDefault();
+    
+    var uid = $(this).data('id');   // it will get id of clicked row
+    
+    $('#return-content').html(''); // leave it blank before ajax call
+    $('#return-loader').show();      // load ajax loader
+    
+    $.ajax({
+      url: 'project_monitoring_return.php',
+      type: 'POST',
+      data: 'id='+uid,
+      dataType: 'html'
+    })
+    .done(function(data){
+      console.log(data);  
+      $('#return-content').html('');    
+      $('#return-content').html(data); // load response 
+      $('#return-loader').hide();      // hide ajax loader 
+    })
+    .fail(function(){
+      $('#return-content').html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+      $('#return-loader').hide();
     });
     
   });
 
   
+});
+  $("#navigation").change(function()
+{
+    document.location.href = $(this).val();
 });
 
     </script>
@@ -244,7 +414,7 @@ $(document).ready(function(){
                             <i class="fa fa-user prefix grey-text"></i>
                             <input placeholder="Project Title" type="text" id="form5" class="form-control" name="ProjectTitle" required=""></div>
                         <div class="col-6 col-md-6">
-                            <input placeholder="Project Owner" type="text" id="form5" class="form-control" name="ProjectOwner"  required=""></div>
+                            <input placeholder="Project Owner" type="text" id="form5" class="form-control" name="ProjectOwner"  required="" onkeyup="letter(this);"></div>
                     </div>
                     <div class="md-form row">
                         <div class="col-12 col-md-12">
@@ -252,12 +422,16 @@ $(document).ready(function(){
                             <input placeholder="Project Location" type="text" id="form5" class="form-control" name="ProjectLocation"  required=""></div>
                         
                     </div>
-                    <div class="md-form row">
-                        <div class="col-12 col-md-12">
+                   <div class="md-form row">
+                        <div class="col-6 col-md-6">
                             <i class="fa fa-address prefix grey-text"></i>
-                            <input placeholder="Amount of Contract" type="text" id="form5" class="form-control" name="ProjectCosting"  required=""></div>
-                        
+                            <label style="padding-left: : 20px;">Project Start Date</label>
+                            </div>
+                        <div class="col-6 col-md-6">
+                            <i class="fa fa-address prefix grey-text"></i>
+                            <label class="label">Estimated Date End</label>
                     </div>
+                </div>
                    <div class="md-form row">
                         <div class="col-6 col-md-6">
                             <i class="fa fa-calendar-o prefix grey-text" aria-hidden="true"></i>
@@ -319,93 +493,25 @@ $(document).ready(function(){
 </div>
 
 
-<div class="modal fade" id="modaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-bold">Edit</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body mx-3">
-                <!-- edit form -->
-                <form method="POST"  action="project_action.php">
-                    <div class="md-form row">
-                        <div class="col-6 col-md-6">
-                            <i class="fa fa-user prefix grey-text"></i>
-                            <input placeholder="Project Title" type="text" id="form5" class="form-control" name="ProjectTitle" required=""></div>
-                        <div class="col-6 col-md-6">
-                            <input placeholder="Project Owner" type="text" id="form5" class="form-control" name="ProjectOwner"  required=""></div>
-                    </div>
-                    <div class="md-form row">
-                        <div class="col-12 col-md-12">
-                            <i class="fa fa-address prefix grey-text"></i>
-                            <input placeholder="Project Location" type="text" id="form5" class="form-control" name="ProjectLocation"  required=""></div>
-                        
-                    </div>
-                    <div class="md-form row">
-                        <div class="col-12 col-md-12">
-                            <i class="fa fa-address prefix grey-text"></i>
-                            <input placeholder="Amount of Contract" type="text" id="form5" class="form-control" name="ProjectCosting"  required=""></div>
-                        
-                    </div>
-                   <div class="md-form row">
-                        <div class="col-6 col-md-6">
-                            <i class="fa fa-calendar-o prefix grey-text" aria-hidden="true"></i>
-                            <input placeholder="Date Started" type="date" id="form5" class="form-control" name="ProjectStart"  required=""></div>
-                        <div class="col-6 col-md-6">
-                            <input placeholder="Date End" type="date" id="form5" class="form-control" name="ProjectEnd"></div>
-                    </div>
-                    <div class="md-form row">
-                        <div class="col-12 col-md-12">
-                            <i class="fa fa-address prefix grey-text"></i>
-                            <input placeholder="Project Scope" type="text" id="form5" class="form-control" name="ProjectScope"  required=""></div>
-                        
-                    </div>
-                    <div class="md-form row">
-                        <div class="col-12 col-md-12">
-                            <i class="fa fa-user prefix grey-text"></i>
-                            <input placeholder="Project Head" type="text" id="form5" class="form-control" name="ProjectHead" ></div>
-                        
-                    </div>
-                    <div class="md-form">
-                        <input class="btn btn-dark-green pull-right" type="submit" name="milestone">
-                    </div>
-                    <div class="md-form">
-                        <center>
-                            <div class="btn-group">
-                                <input type="submit"  class="btn btn-dark-green" name="submit-project" >
-                                <input type="button"  id="form5" class=" btn btn-danger" value="close"  data-dismiss="modal">
-                            </div>
-                        
-                        </center>
-                    </div>
-                </form>
-                <!-- edit form -->
-            
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <div class="modal fade" id="modaldelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h5 class="modal-title w-100 font-bold">Are you sure to delete this project?</h5>
+                <h4 class="modal-title w-100 font-bold">Are you sure to delete this project?</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body mx-3">
-
-                <div id="modal-loader" style="display: none; text-align: center;">
+                <p style="text-align: justify;">If you delete this project,all boq or materials related in this project will be deleted also</p>
+                <div id="modal-loader1" style="display: none; text-align: center;">
                  <img src="assets/img/ajax-loader.gif">
                 </div>
                  
                 <!-- content will be load here -->                          
-                <div id="dynamic-content"></div>
+                <div id="delete-content"></div>
                 
             
             </div>
@@ -413,3 +519,60 @@ $(document).ready(function(){
     </div>
 </div>
 
+
+<div class="modal fade" id="modalprint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title w-100 font-bold">Special Project Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <center>
+                <form method="post" action="fpdf181/index.php" target="_blank">
+                  <label class="label">Date</label>
+                    <input type="month" name="date" class="form-control">
+                    <select name="type">
+                     <option value="1">Year</option>
+                     <option value="2">Month</option>
+                   </select>
+                   <br> 
+                  <input class="btn btn-primary" type="submit" name="Print_Sp" >
+                </form>
+                </center>
+                
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title w-100 font-bold">Project Update</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+               <div id="updatemodal-loader1" style="display: none; text-align: center;">
+                 <img src="assets/img/ajax-loader.gif">
+                </div>
+                 
+                <!-- content will be load here -->                          
+                <div id="update-content"></div>
+                
+                
+            
+            </div>
+        </div>
+    </div>
+</div>
